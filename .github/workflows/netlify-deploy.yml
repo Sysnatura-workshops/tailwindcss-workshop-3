@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Netlify
+        id: netlify_deploy
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -24,7 +25,8 @@ jobs:
       - name: Extract Netlify deploy URL
         id: extract_url
         run: |
-          DEPLOY_URL=$(jq -r '.deploy_url' <<< ${{ steps.deploy.outputs.stdout }})
+          echo "${{ steps.netlify_deploy.outputs.stdout }}" > deploy.json
+          DEPLOY_URL=$(jq -r '.deploy_url' deploy.json)
           echo "::set-output name=url::$DEPLOY_URL"
 
       - name: Comment PR with deploy link
