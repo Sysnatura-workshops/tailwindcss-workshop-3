@@ -19,4 +19,24 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
-          args: deploy --dir=dist --prod
+          args: deploy --dir=dist --prod --json
+
+      - name: Extract Netlify deploy URL
+        id: extract_url
+        run: |
+          DEPLOY_URL=$(jq -r '.deploy_url' <<< ${{ steps.deploy.outputs.stdout }})
+          echo "::set-output name=url::$DEPLOY_URL"
+
+      - name: Comment PR with deploy link
+        uses: actions/github-script@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const url = "${{ steps.extract_url.outputs.url }}";
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `The deployment is available at:\n\n${url}`
+            });
