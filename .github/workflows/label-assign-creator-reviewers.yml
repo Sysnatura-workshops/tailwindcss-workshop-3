@@ -1,0 +1,23 @@
+name: Label and Assign PR to assignee and reviewers.
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+jobs:
+  automation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Assign PR to creator
+      uses: thomaseizinger/assign-pr-creator-action@v1.0.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: delivery-much/actions-assigner@v1
+      with:
+        token: ${{ secrets.GH_TOKEN_PLURAL_ENV }}
+        team-reviewers: web-team
+    - name: Label PR based on branch
+      uses: ffittschen/pr-branch-labeler@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
