@@ -1,119 +1,22 @@
-name: Build and Deploy to Netlify
+name: Deploy to Netlify
+
 on:
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
+
 jobs:
-  build-deploy-netlify:
-    timeout-minutes: 18
-    runs-on: ubuntu-20.04
+  deploy:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v6
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ubuntu-latest-node-18.x-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ubuntu-latest-node-18.x-yarn-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          registry-url: https://registry.npmjs.org/
-      - name: Install
-        run: |
-          # Remove .npmrc if exits
-          rm -rf .npmrc
-          yarn install --frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Create deployment
-        run: |
-          rm -rf .npmrc
-          mkdir -p ci-utils && cd ci-utils && npm init -y
-          npm i --legacy-peer-deps @pluralcom/plural-ci-utils@"<0.1.0"
-          cd ..
-          node ./ci-utils/node_modules/@pluralcom/plural-ci-utils/lib/ci/scripts/githubUpsertDeploymentAndTrigger.js $BRANCH_NAME $LOG_URL $DEPLOYMENT_URL
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PLURAL_ENV }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
-          JIRA_HOST: ${{ secrets.JIRA_HOST }}
-          BRANCH_NAME: ${{ steps.branch-name.outputs.current_branch }}
-          LOG_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs['deploy-url'] }}
-      - name: Build
-        run: yarn build
-        env:
-          REACT_APP_HEROKU: true
-          REACT_APP_TEST_STRIPE_PUBLIC_KEY: ${{ secrets.REACT_APP_TEST_STRIPE_PUBLIC_KEY }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Deploy to Netlify
-        id: deploy
-        uses: nwtgck/actions-netlify@v1.1
-        with:
-          publish-dir: './build'
-          production-branch: develop
-          github-token: ${{ secrets.GH_TOKEN_PLURAL_ENV }} #  $ use plural env instead of github actions
-          deploy-message: "Branch: ${{ steps.branch-name.outputs.current_branch }} - Event: ${{ github.event.number }}"
-          enable-pull-request-comment: false
-          enable-commit-comment: false
-          overwrites-pull-request-comment: false
-          alias: deploy-preview-${{ github.event.number }}
-          production-deploy: false
+        uses: netlify/actions/cli@master
         env:
-          GH_TOKEN_PLURAL_ENV: ${{ secrets.GH_TOKEN_PLURAL_ENV }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1
-      - name: Move Jira Ticket/Merge PR
-        run: |
-          rm -rf .npmrc
-          npm i --legacy-peer-deps @pluralcom/plural-ci-utils@"<0.1.0"
-          node ./node_modules/@pluralcom/plural-ci-utils/lib/ci/scripts/onDeploymentSuccess.js $BRANCH_NAME $GITHUB_PR_NUMBER "web-team" $LOG_URL $DEPLOYMENT_URL
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PLURAL_ENV }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
-          JIRA_HOST: ${{ secrets.JIRA_HOST }}
-          GITHUB_PR_NUMBER: ${{ github.event.number }}
-          BRANCH_NAME: ${{ steps.branch-name.outputs.current_branch }}
-          LOG_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs['deploy-url'] }}
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_RELEASE_BOT }}
-          SLACK_USERNAME: "static website release bot"
-          SLACK_CHANNEL: "releases_dev"
-          SLACK_ICON: "https://avatars0.githubusercontent.com/u/7892489?s=32&v=4"
-          SLACK_MESSAGE: "🚀🕸 Deployed ${{github.repository}} on ${{ steps.deploy.outputs['deploy-url'] }}\nBranch: ${{ steps.branch-name.outputs.current_branch }} - PR: https://github.com/${{github.repository}}/pulls/${{github.event.number}}"
-      - name: Update Jira with deployment URL
-        run: |
-          node ./node_modules/@pluralcom/plural-ci-utils/lib/ci/scripts/jiraUpdateTicketDeploymentUrl.js $BRANCH_NAME $DEPLOYMENT_FIELD_ID $DEPLOYMENT_URL
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
-          JIRA_HOST: ${{ secrets.JIRA_HOST }}
-          BRANCH_NAME: ${{ steps.branch-name.outputs.current_branch }}
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs['deploy-url'] }}
-          DEPLOYMENT_FIELD_ID: customfield_10051
-      - name: On Failure - Move Jira Ticket
-        if: ${{ failure() }}
-        run: |
-          rm -rf .npmrc
-          npm i --legacy-peer-deps @pluralcom/plural-ci-utils@"<0.1.0"
-          node ./node_modules/@pluralcom/plural-ci-utils/lib/ci/scripts/onDeploymentFail.js $BRANCH_NAME $LOG_URL
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
-          JIRA_HOST: ${{ secrets.JIRA_HOST }}
-          BRANCH_NAME: ${{ steps.branch-name.outputs.current_branch }}
-          LOG_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          args: deploy --dir=dist --prod
