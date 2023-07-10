@@ -1,0 +1,20 @@
+name: Deploy Pull Request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to web server
+        run: |
+          # Replace this command with the deployment steps for your project
+          # For example, you might use FTP or SCP to transfer files to a web server
