@@ -15,30 +15,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Netlify
-        id: netlify_deploy
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
-          args: deploy --dir=dist --prod --json
-
-      - name: Extract Netlify deploy URL
-        id: extract_url
-        run: |
-          echo "${{ steps.netlify_deploy.outputs.stdout }}" > deploy.json
-          DEPLOY_URL=$(jq -r '.deploy_url' deploy.json)
-          echo "::set-output name=url::$DEPLOY_URL"
-
-      - name: Comment PR with deploy link
-        uses: actions/github-script@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          script: |
-            const url = "${{ steps.extract_url.outputs.url }}";
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `The deployment is available at:\n\n${url}`
-            });
+          args: deploy --dir=dist --prod
