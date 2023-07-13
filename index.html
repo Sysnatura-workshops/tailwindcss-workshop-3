@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body class="max-w-screen-2xl">
     <div class=" flex flex-col flex justify-center ">
-<!-- navbar -->
+        <!-- navbar -->
         <header>
-            <nav class="flex ml-3  text-black w-full">
+            <nav class="flex ml-3  text-black ">
                 <div class="pl-4 xl:px-12 flex w-full items-center">
-<!-- Responsive navbar -->
+                    <!-- Responsive navbar -->
                     <a class="navbar-burger  md:hidden" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -23,7 +25,7 @@
                     <a class=" shrink-0 font-bold font-heading" href="#">
                         <img src="assets/logotitle.svg" alt="">
                     </a>
-<!-- Nav Links -->
+                    <!-- Nav Links -->
                     <ul class="hidden md:flex  px-4 mx-auto font-semibold font-heading space-x-6">
                         <li><a class="hover:text-gray-200" href="#">Our Platform</a></li>
                         <li><a class="hover:text-gray-200" href="#">Pricing</a></li>
@@ -42,7 +44,7 @@
             </nav>
         </header>
         <br><br>
-<!-- about section -->
+        <!-- about section -->
         <section class="  text-black flex justify-center flex-col px-14 md:shrink-0 ">
             <div>
                 <img src="assets/dollaricon.svg" alt="">
@@ -60,14 +62,14 @@
             </div>
         </section>
         <br><br><br>
-<!-- price section -->
+        <!-- price section -->
         <section class=" flex flex-col items-center ">
             <div class="font-bold text-4xl">VOLUME DISCOUNTS</div>
             <br>
             <div>
                 <div class="rounded-3xl flex flex-row  border-2 border-slate-200  md:shrink-0 ">
-                            <button
-                             class="rounded-3xl hover:bg-blue-400 hover:text-white px-12 py-1 font-semibold "><25 </button>
+                    <button class="rounded-3xl hover:bg-blue-400 hover:text-white px-12 py-1 font-semibold ">
+                        <25 </button>
                             <button
                                 class="rounded-3xl hover:bg-blue-400 hover:text-white px-7 py-1 font-semibold">26-100</button>
                             <button
@@ -79,7 +81,7 @@
             <div class=" text-3xl">Home Built Per Year</div>
         </section>
         <br><br>
-<!--price 299-->
+        <!--price 299-->
         <div class="flex flex-col  justify-center  sm:flex-row">
             <div id="299" class=" w-72  rounded-3xl items-center ">
                 <div class="px-7 py-12">
@@ -129,12 +131,12 @@
                             <div><img src="assets/whitecross.svg" alt=""></div>
                             <div>Procore Integration</div>
                         </div><br>
-                        <button class=" text-xl font-bold text-blue-400 px-2 py-3 bg-slate-100 w-full rounded-xl">Sign
+                        <button class=" text-xl font-bold text-blue-400 px-2 py-3 bg-slate-100 w-full rounded-xl hover:bg-blue-300 hover:text-white">Sign
                             Up</button> <br><br>
                     </div>
                 </div>
             </div>
-<!--price 399-->
+            <!--price 399-->
             <div id="399" class="w-72  bg-blue-400 rounded-3xl shadow-2xl shadow-gray-500 ">
                 <div class="px-7 py-12">
                     <button
@@ -184,25 +186,115 @@
                             <div><img src="assets/whitetick.svg" alt=""></div>
                             <div>Procore Integration</div>
                         </div><br>
-                        <button class=" text-xl font-bold text-blue-400 px-2 py-3 bg-white w-full rounded-xl">Sign
+                        <button class=" text-xl font-bold text-blue-400 px-2 py-3 bg-slate-100 w-full rounded-xl hover:bg-blue-300 hover:text-white">Sign
                             Up</button><br><br>
                     </div>
                 </div>
             </div>
         </div>
-        <br><br><br>
-<!--contact section-->
+        <br><br><br><br>
+        <!--contact section-->
         <section>
-            <div class="text-center space-y-2">
-                <p class="text-slate-500 font-semibold text-xl ">Work on Commercial Projects?</p>
-                <p class="font-bold text-4xl">Call or Email Us For Pricing 1-844-814-4627</p><br>
-                <div class="border-2 border-slate-200">
-                    <input type="text" placeholder="E.g. ziggy@space.com">
-                    <button class="bg-blue-400 text-white px-3 py-2 rounded">Pricing Information</button>
+            <div class="text-center space-x-24 flex flex-row justify-center">
+                <div>
+                    <p class="text-slate-500 font-semibold text-xl ">Work on Commercial Projects?</p>
+                    <p class="font-bold text-4xl">Call or Email Us For Pricing <br> 1-844-814-4627</p><br>
+                </div>
+                <div class="bg-white rounded-lg p-1 border-2 text-white itm flex flex-row">
+                    <input type="text" placeholder="E.g. ziggy@space.com" class="text-black">
+                    <button class="rounded-lg bg-blue-400 px-6 py-2">Sign Up</button>
                 </div>
             </div>
         </section>
     </div>
     </div>
+    <!--footer section-->
+    <br><br><br><br>
+    <footer class="bg-blue-400 px-12 py-8 rounded-t-3xl text-white space-y-24 ">
+        <div class="flex flex-row space-x-24 ">
+            <div class="flex flex-row space-x-10">
+                <div class="space-y-4">
+                    <p class="font-bold text-3xl">Why NextPort?</p>
+                    <div class="space-y-2 flex flex-col ">
+                        <a  class="hover:text-blue-100" href="">Our Innovative Solution</a>
+                        <a  class="hover:text-blue-100" href="">Improve Customer <br> Experience</a>
+                        <a  class="hover:text-blue-100" href="">Enhance Productivity</a>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-bold text-3xl">Product</p>
+                    <div>
+                        <a  class="hover:text-blue-100" href="">Features</a>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-bold text-3xl">Pricing</p>
+                    <div class="space-y-2 flex flex-col">
+                        <a  class="hover:text-blue-100" href="">Plans</a>
+                        <a  class="hover:text-blue-100" href="">14 Day Free Trial</a>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-bold text-3xl">Resources</p>
+                    <div class="space-y-2 flex flex-col">
+                        <a  class="hover:text-blue-100" href="">Download App</a>
+                        <a  class="hover:text-blue-100" href="">Sales Support</a>
+                        <a  class="hover:text-blue-100" href="">Integrations & <br>
+                            Partnerships</a>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-bold text-3xl">Company</p>
+                    <div>
+                        <a  class="hover:text-blue-100" href="">About Us</a>
+                    </div>
+                </div>
+            </div>
+            <!--footer email section-->
+            <div class="space-y-4 shrink-0">
+                <p class="font-bold text-3xl">Try it for 14 Days</p>
+                <div class="space-y-2 flex flex-col">
+                    <p class="font-semibold text-xl">Email</p>
+                    <div class="bg-white rounded-lg p-1">
+                        <input type="text" placeholder="E.g. ziggy@space.com" class="text-black px-4">
+                        <button class="rounded-lg bg-blue-400 px-6 py-4 hover:bg-blue-200 hover:text-white">Sign Up</button>
+                    </div>
+                    <p>No credit card needed</p>
+                </div>
+            </div>
+        </div>
+        <!--footer icon section-->
+        <div class="space-y-4">
+            <p class="text-3xl font-bold">Follow Us</p>
+            <div class="flex flex-row space-x-8">
+                <a href="https://www.facebook.com/">
+                    <img src="assets/faceboook.svg" alt="">
+                </a>
+                <a href="https://in.linkedin.com/">
+                    <img src="assets/linkedin.svg" alt="">
+                </a>
+                <a href="https://twitter.com/?lang=en-in">
+                    <img src="assets/twitter.svg" alt="">
+                </a>
+                <a href="https://www.instagram.com/">
+                    <img src="assets/insta.svg" alt="">
+                </a>
+            </div><br><br>
+            <hr class="bg-slate-100">
+            <br>
+            <!--footer copyright section-->
+            <div class="flex flex-row space-x-64">
+                <div class="font-bold text-2xl flex flex-row space-x-8 ">
+                    <a class="hover:text-blue-100" href="">Privacy Policy</a>
+                    <a class="hover:text-blue-100" href="">Terms and Conditions</a>
+                    <a class="hover:text-blue-100" href="">Support</a>
+                </div>
+                <div class="text-xl">
+                    <p>Copyright © 2021 NextPort. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
+
 </html>
