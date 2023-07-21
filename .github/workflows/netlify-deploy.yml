@@ -1,0 +1,22 @@
+name: Deploy to Netlify
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        with:
+          args: deploy --dir=dist --prod
